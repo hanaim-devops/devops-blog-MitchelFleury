@@ -7,6 +7,7 @@ RUN cargo install mdbook --version 0.4.40
 
 # Install necessary mdbook preprocessors
 RUN cargo install mdbook-linkcheck --locked --version 0.7.7
+RUN cargo install mdbook-kroki-preprocessor --locked --version 0.2.0
 
 # Set the working directory
 WORKDIR /book
@@ -21,10 +22,10 @@ RUN mdbook build
 FROM nginx:1.27.1-alpine
 
 # Copy the built book from the build container to NGINX's web root
-COPY --from=builder /book/book /usr/share/nginx/html
+COPY --from=builder /book/book/html /usr/share/nginx/html
 
-# Expose port 8081
-EXPOSE 8081
+# Expose port 80
+EXPOSE 80
 
 # Start NGINX
 CMD ["nginx", "-g", "daemon off;"]

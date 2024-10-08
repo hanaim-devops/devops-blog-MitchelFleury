@@ -11,3 +11,5 @@ warning-policy = "ignore"
 [output.html.fold]
 enable = true
 level = 2
+
+[preprocessor.kroki-preprocessor]
