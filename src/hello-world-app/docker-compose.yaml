@@ -17,6 +17,8 @@ services:
       - 9100:9100
   alert-manager:
     image: prom/alertmanager
+    volumes:
+      - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
     networks:
       - localprom
     ports:

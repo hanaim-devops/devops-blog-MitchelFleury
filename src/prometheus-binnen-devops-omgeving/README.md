@@ -8,26 +8,14 @@
 Een draaiende applicatie kan tegen problemen aanlopen. Maar hoe kom je er achter dat er een probleem is en wat dat probleem dan is? Een tool als Prometheus verzameld metrics en geeft automatisch meldingen wanneer er iets fout gaat. Wat Prometheus nou precies is en hoe deze tool werkt vertel ik in deze blogpost.
 
 ## Wat is Prometheus?
-Prometheus is een open-source systems monitoring en alerting toolkit die origineel ontwikkeld is door SoundCloud. Inmiddels is Prometheus een opzichzelf staand project dat sinds 2016 op CNCF staat (Prometheus, z.d.-a). 
+Prometheus is een open-source systems monitoring en alerting toolkit die oorspronkelijk ontwikkeld is door SoundCloud. Inmiddels is Prometheus een opzichzelf staand project dat sinds 2016 op CNCF staat (Prometheus, z.d.-a). Prometheus verzamelt data van systemen door middel van een pull model (hier ga ik later dieper op in) waardoor je de prestaties in real-time kan analyseren. Prometheus slaat de data op als 'time series data', dus de data met daarbij ook de timestamp. 'Time series' is een reeks aan data die op basis van tijd wordt gesorteerd (Wikipedia, z.d.). Dit kan het makkelijker maken om grafieken op basis van tijd te maken. Dit format is geschikt voor het bijhouden van trends en veranderingen in tijd, denk hierbij bijvoorbeeld aan CPU-gebruik.
 
-### Features
-Prometheus slaat de data op als 'time series data', dus de data met daarbij ook de timestamp. 'Time series' is een reeks aan data die op basis van tijd wordt gesorteerd (Wikipedia, z.d.). Dit kan het makkelijker maken om grafieken op basis van tijd te maken.
+Om data van Prometheus te kunnen inzien gebruik je PromQL (Prometheus Query Language). Dit is een eigen query taal van Prometheus om data te kunnen ophalen (Prometheus, z.d.-b). De resultaten van een query worden weergegeven in een grafiek, een gegevenstabel of kunnen worden opgehaald via een HTTP API. Voor het maken van een dashboard is Prometheus zelf niet geschikt en raad ik aan om een tool als Grafana te gebruiken.
 
-PromQL (Prometheus Query Langue) is een eigen query taal van Prometheus om data te kunnen ophalen (Prometheus, z.d.-b). De resultaten van een query worden weergegeven in een grafiek, een gegevenstabel of kunnen worden opgehaald via een HTTP API.
-
-Elke prometheus server heeft zijn eigen data en is zelfstandig. Dit brengt zijn voordelen mee zoals betrouwbaarheid (als een andere node weg valt blijft deze draaien) en schaalbaarheid door replicatie. Maar dit brengt ook een nadeel met zich mee, omdat het geen gedistributeerde opslag ondersteunt (Ritesh, 2024). Hier zou je een andere tool voor moeten gebruiken.
-
-Prometheus gebruikt een pull model dat data ophaalt via HTTP. Een pull model maakt het onder andere mogelijk om een centrale plek te hebben voor configuratie (Daniel F, 2024). 
-
-### Belangrijkste termen
-
-- Prometheus server: Dit is de kern van het systeem. Het haalt metrics op, slaat ze op en biedt de mogelijkheid om queries uit te voeren via PromQL (Tigera, z.d.).
-- Exporter: Is een kleine applicatie die runt naast de applicatie waar je data van wilt ophalen. De exporter maakt de data beschikbaar, vaak moet de data nog wel worden omgezet naar een formaat dat Prometheus ondersteunt (Prometheus, z.d.-c).
-- Alertmanager: Verwerkt alerts en verstuurd dan meldingen naar een platform naar keuze (bijv slack).
-
-Prometheus (z.d.-c) heeft een eigen waar je nog meer termen kan vinden.
+Prometheus analyseert ook zelf de data en kan alerts versturen naar platforms zoals Slack doormiddel van de alertmanager (Prometheus, z.d.-c). De alerts worden getriggerd door 'rules' die je zelf definieert. Een voorbeeld van een rule is dat een systeem niet langer dan een minuut uit mag staan. Als dit wel het geval is levert het een alert op dat uiteindelijk resulteert in bijvoorbeeld een melding op Slack.
 
 ## Architectuur
+
 <img src="plaatjes/prometheus-architecture.png" width="1000" align="center" alt="Prometheus architectuur ontwerp" title="Prometheus architectuur">
 
 *Afbeelding 2: Prometheus architectuur*
@@ -119,6 +107,40 @@ alert-manager:
 
 Bij het opnieuw uitvoeren van docker-compose up zal de alertmanager draaien op poort 9093. Om de alert te testen kan je handmatig in docker de node-exporter uitzetten. Dit resulteert in een alert die binnenkomt in de alertmanager.
 
+Om iets te doen met deze alerts zoals het sturen van berichten naar Slack heb je nog een extra configuratie nodig. Maak een `alertmanager.yml` aan. Hier definieer je naar welk slack kanaal een bericht moet worden gestuurd. Je hebt wel een `api_url` van Slack nodig, hier heb ik een eigen Slack app voor gemaakt. 
+```
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'slack-notifications'
+
+receivers:
+  - name: 'slack-notifications'
+    slack_configs:
+      - api_url: 'YOUR SLACK URL'
+        channel: '#YOUR-CHANNEL'
+        send_resolved: true
+```
+
+Pas ook de `docker-compose.yaml` aan zodat er een volume is voor de alertmanager
+```
+  alert-manager:
+    image: prom/alertmanager
+    volumes:
+      - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"  # Voeg deze regel toe
+    networks:
+      - localprom
+    ports:
+      - 9093:9093
+```
+
+Als we nu weer de node-exporter uitzetten resulteert dit in een melding in slack zoals te zien is in afbeelding 3.
+
+<img src="plaatjes/slack-bericht.png" width="1000" align="center" alt="Slack melding" title="Slack melding">
+
+*Afbeelding 3: Slack melding*
+
 ## Voor- en nadelen
 
 Ik vind zelf de documentatie van Prometheus beginner vriendelijk. Er wordt naar mijn mening goed beschreven wat een bepaald onderwerp is en hoe het werkt. Er wordt ook doorgelinkt naar andere pagina's in de documentatie voor meer informatie. Daarnaast is er ook een glossary die de belangrijkste termen kort beschrijft, dit vond ik als 'beginner' erg fijn.
@@ -131,9 +153,13 @@ Een groot nadeel aan Prometheus is dat het uitzichzelf niet geschikt is voor lon
 
 Prometheus is open source en dit brengt twee voordelen met zich mee. Prometheus is gratis en wordt ondersteund door een grote community. Zo zijn er meer dan 900 contributors op GitHub.
 
+Elke prometheus server heeft zijn eigen data en is zelfstandig. Dit brengt zijn voordelen mee zoals betrouwbaarheid (als een andere node weg valt blijft deze draaien) en schaalbaarheid door replicatie. Maar dit brengt ook een nadeel met zich mee, omdat het geen gedistributeerde opslag ondersteunt (Ritesh, 2024). Hier zou je een andere tool voor moeten gebruiken.
+
 ## Conclusie
 
-Prometheus is een monitoring tool voor het ophalen en opslaan van time series data. Deze data geeft real-time inzicht inzicht in de huidige status de systemen. Daarnaast ondersteunt Prometheus alerts via de alertmanager naar platformen zoals Slack, zodat je gelijk op de hoogte bent van problemen. Voordat je Prometheus gebruikt moet je nadenken of dit de juiste tool is voor jouw usecase, zo is het bijvoorbeeld niet geschikt om events op te slaan. 
+Prometheus kan effectief worden ingezet voor monitoring en alerting in een DevOps-omgeving. Het systeem verzamelt eenvoudig metrics van verschillende bronnen met behulp van exporters, terwijl de alertmanager meldingen verstuurt wanneer er problemen zijn. Dit maakt het mogelijk om snel inzicht te krijgen in de prestaties van systemen en om tijdig actie te kunnen ondernemen.
+
+Prometheus is geschikt voor kortetermijnanalyses en real-time monitoring, maar minder voor long-term monitoring en log-gebaseerde data. Voor deze toepassingen is het nodig om aanvullende tools zoals Thanos in te zetten. Door de goede integratie met tools zoals Grafana voor visualisatie en Slack voor meldingen, kan Prometheus goed worden gebruikt in zowel kleine als grote projecten. 
 
 ## Bronnen
 
