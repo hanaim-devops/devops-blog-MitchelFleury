@@ -135,7 +135,7 @@ Pas ook de `docker-compose.yaml` aan zodat er een volume is voor de alertmanager
 
 Als we nu weer de node-exporter uitzetten, resulteert dit in een melding in Slack zoals te zien is in afbeelding 3.
 
-<img src="plaatjes/slack-bericht.png" width="1000" align="center" alt="Slack melding" title="Slack melding">
+<img src="plaatjes/slack-melding.png" width="1000" align="center" alt="Slack melding" title="Slack melding">
 
 *Afbeelding 3: Slack melding*
 
