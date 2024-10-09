@@ -9,13 +9,12 @@ Onderzoeksmethode: Literature study
 - Hoe verschilt Prometheus van andere monitoring tools zoals Grafana, Zabbix of Nagios?
 - Welke componenten vormen de basis van Prometheus
 
-
 **Deelvraag 2:** Hoe werkt het monitoring- en alerting-mechanisme van Prometheus?
 Onderzoeksmethode: Prototyping
 
-- Hoe start ik een Prometheus applicatie
-- Hoe voeg ik een alertmanager toe aan Prometheus
-
+- Hoe werkt prometheus?
+  - Hoe wordt data opgehaald/getoont
+  - Hoe worden alerts verwerkt?
 
 **Deelvraag 3:** Wat zijn de voor- en nadelen van het gebruik van Prometheus in een DevOps-context?
 Onderzoeksmethode: Community research
@@ -24,10 +23,8 @@ Onderzoeksmethode: Community research
 - Waarom is Prometheus een populaire keuze in cloud-native omgevingen zoals Kubernetes?
 - Wat zijn de belangrijkste uitdagingen bij het schalen van Prometheus in grote infrastructuren?
 
-
-**Deelvraag 4:** Hoe pas je Prometheus praktisch toe voor een DevOps-workflow?
+**Deelvraag 4:** Hoe pas je Prometheus praktisch toe?
 Onderzoeksmethode: Prototyping
 
-- Welke rol speelt Prometheus in Continuous Integration/Continuous Deployment (CI/CD) pipelines?
-- Hoe kunnen beginnende DevOps-studenten Prometheus gebruiken om de prestaties van applicaties te monitoren en problemen vroegtijdig te detecteren?
-- Welke best practices zijn er voor het monitoren van microservices of containerized applicaties met Prometheus?
+- Hoe start ik een Prometheus applicatie
+- Hoe voeg ik een alertmanager toe aan Prometheus
