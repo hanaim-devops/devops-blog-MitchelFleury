@@ -46,7 +46,7 @@ scrape_configs:
        - node-exporter:9100
 ```
 
-Ik gebruik Prometheus in Docker, zodat ik het niet lokaal hoef te installeren. Ik maak hier dus een `docker-compose.yml` file voor aan.
+Ik gebruik Prometheus in Docker, zodat ik het niet lokaal hoef te installeren. Ik maak hier dus een `docker-compose.yaml` file voor aan.
 ```
 version: '3'
 services:
@@ -93,7 +93,7 @@ alerting:
         - alert-manager:9093
 ```
 
-Ook in de `docker-compose.yml` moet de alertmanager gedefineerd worden als een service.
+Ook in de `docker-compose.yaml` moet de alertmanager gedefineerd worden als een service.
 ```
 alert-manager:
   image: prom/alertmanager
@@ -147,11 +147,11 @@ Prometheus is erg gericht op time series data. Het heeft een eigen database (TSD
 
 Er is een alerting systeem waar je meldingen van kan krijgen wanneer er iets fout gaat in je systeem. 
 
-Een groot nadeel aan Prometheus is dat het uit zichzelf niet geschikt is voor long-term monitoring (Ritesh, 2024). Prometheus kan op kleinere projecten goed meeschalen, maar heeft wel moeite voor grotere projecten. Prometheus slaat veel data op, al helemaal als je het opschaalt. Dit kan tot hoge kosten leiden en dat is iets wat je liever niet wilt. Om deze problemen te verhelpen zou je een tool als Thanos kunnen gebruiken. Ik raad je aan om de blog over Thanos te lezen van mijn collega Jelmer (BRON).
+Een groot nadeel aan Prometheus is dat het uit zichzelf niet geschikt is voor long-term monitoring (Ritesh, 2024). Prometheus kan op kleinere projecten goed meeschalen, maar heeft wel moeite voor grotere projecten. Prometheus slaat veel data op, al helemaal als je het opschaalt. Dit kan tot hoge kosten leiden en dat is iets wat je liever niet wilt. Om deze problemen te verhelpen zou je een tool als Thanos kunnen gebruiken. Ik raad je aan om de blog over Thanos te lezen van mijn collega Noppert (2024).
 
 Prometheus is open source en dit brengt twee voordelen met zich mee. Prometheus is gratis en wordt ondersteund door een grote community. Zo zijn er meer dan 900 contributors op GitHub.
 
-Elke prometheus server heeft zijn eigen data en is zelfstandig. Dit brengt zijn voordelen mee zoals betrouwbaarheid (als een andere node weg valt blijft deze draaien) en schaalbaarheid door replicatie. Maar dit brengt ook een nadeel met zich mee, omdat het geen gedistributeerde opslag ondersteunt (Ritesh, 2024). Hier zou je een andere tool voor moeten gebruiken.
+Elke prometheus server heeft zijn eigen data en is zelfstandig. Dit brengt zijn voordelen mee zoals betrouwbaarheid (als een andere node weg valt blijft deze draaien) en schaalbaarheid door replicatie. Echter brengt dit ook een nadeel met zich mee, omdat het geen gedistributeerde opslag ondersteunt (Ritesh, 2024). Hier zou je een andere tool voor moeten gebruiken.
 
 ## Conclusie
 
@@ -162,6 +162,7 @@ Prometheus is geschikt voor kortetermijnanalyses en real-time monitoring, maar m
 ## Bronnen
 
 - Daniel F. (2024, 12 juli). *Is Prometheus Monitoring Push or Pull?*. SigNoz. Geraadpleegd op 7 oktober 2024, via https://signoz.io/guides/is-prometheus-monitoring-push-or-pull/
+- Noppert J. (2024 oktober). *De ultieme Endgame voor je metrics: Thanos*. GitHub. Geraadpleegd op 9 oktober 2024, via https://github.com/hanaim-devops/devops-blog-pietknoppert/tree/main/src/dev-blog-thanos-snapt-je-devops-together
 - Prometheus. (z.d.-a). *Prometheus overview*. Prometheus. Geraadpleegd op 7 oktober 2024, via https://prometheus.io/docs/introduction/overview/
 - Prometheus. (z.d.-b). *Querying Prometheus*. Prometheus. Geraadpleegd op 7 oktober 2024, via https://prometheus.io/docs/prometheus/latest/querying/basics/
 - Prometheus. (z.d.-c). *Glossary*. Prometheus. Geraadpleegd op 7 oktober 2024, via https://prometheus.io/docs/introduction/glossary/
