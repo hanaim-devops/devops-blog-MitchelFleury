@@ -5,14 +5,14 @@
 *[Mitchel Fleury, oktober 2024.](https://github.com/hanaim-devops/blog-MitchelFleury)*
 <hr/>
 
-Een draaiende applicatie kan tegen problemen aanlopen. Maar hoe kom je er achter dat er een probleem is en wat dat probleem dan is? Een tool als Prometheus verzameld metrics en geeft automatisch meldingen wanneer er iets fout gaat. Wat Prometheus nou precies is en hoe deze tool werkt vertel ik in deze blogpost.
+Een draaiende applicatie kan tegen problemen aanlopen, maar hoe kom je erachter dat er een probleem is? Een tool als Prometheus verzameld metrics en geeft automatisch meldingen wanneer er iets fout gaat. Wat Prometheus nou precies is en hoe deze tool werkt vertel ik in deze blogpost.
 
 ## Wat is Prometheus?
 Prometheus is een open-source systems monitoring en alerting toolkit die oorspronkelijk ontwikkeld is door SoundCloud. Inmiddels is Prometheus een opzichzelf staand project dat sinds 2016 op CNCF staat (Prometheus, z.d.-a). Prometheus verzamelt data van systemen door middel van een pull model (hier ga ik later dieper op in) waardoor je de prestaties in real-time kan analyseren. Prometheus slaat de data op als 'time series data', dus de data met daarbij ook de timestamp. 'Time series' is een reeks aan data die op basis van tijd wordt gesorteerd (Wikipedia, z.d.). Dit kan het makkelijker maken om grafieken op basis van tijd te maken. Dit format is geschikt voor het bijhouden van trends en veranderingen in tijd, denk hierbij bijvoorbeeld aan CPU-gebruik.
 
 Om data van Prometheus te kunnen inzien gebruik je PromQL (Prometheus Query Language). Dit is een eigen query taal van Prometheus om data te kunnen ophalen (Prometheus, z.d.-b). De resultaten van een query worden weergegeven in een grafiek, een gegevenstabel of kunnen worden opgehaald via een HTTP API. Voor het maken van een dashboard is Prometheus zelf niet geschikt en raad ik aan om een tool als Grafana te gebruiken.
 
-Prometheus analyseert ook zelf de data en kan alerts versturen naar platforms zoals Slack doormiddel van de alertmanager (Prometheus, z.d.-c). De alerts worden getriggerd door 'rules' die je zelf definieert. Een voorbeeld van een rule is dat een systeem niet langer dan een minuut uit mag staan. Als dit wel het geval is levert het een alert op dat uiteindelijk resulteert in bijvoorbeeld een melding op Slack.
+Prometheus analyseert ook zelf de data en kan alerts versturen naar platforms, zoals Slack, doormiddel van de alertmanager (Prometheus, z.d.-c). De alerts worden getriggerd door 'rules', die je zelf definieert. Een voorbeeld van een rule is dat een systeem niet langer dan een minuut uit mag staan. Als dit wel het geval is, levert het een alert op dat uiteindelijk resulteert in bijvoorbeeld een melding op Slack.
 
 ## Architectuur
 
@@ -20,19 +20,17 @@ Prometheus analyseert ook zelf de data en kan alerts versturen naar platforms zo
 
 *Afbeelding 2: Prometheus architectuur*
 
-Nu we weten wat Prometheus is en doet is het ook belangrijk om te weten hoe het werkt. In afbeelding 2 is de architectuur te zien in een ontwerp.
+Nu we weten wat Prometheus is en doet is het ook belangrijk om te weten hoe het werkt. In afbeelding 2 is een schets te zien van de architectuur van Prometheus
 
-De *Service Discovery* inventariseert naar systemen waar 'metrics' kunnen worden opgehaald. Deze metrics worden gescraped met HTTP via het Pull model, door bijvoorbeeld aan een API te vragen om metrics. Dit scrapen doen de *exporters.* Deze exporters weten hoe ze de metrics kunnen ophalen, van bijvoorbeeld een API of database, en zetten de data om in een formaat dat kan worden gelezen door Prometheus.
+De *Service Discovery* inventariseert naar systemen waar 'metrics' kunnen worden opgehaald. Deze metrics worden gescraped met HTTP via het Pull model, door bijvoorbeeld aan een API te vragen om metrics. Dit scrapen doen de *exporters.* Deze exporters weten hoe ze de metrics kunnen ophalen, van bijvoorbeeld een API of database en zetten de data om in een formaat dat kan worden gelezen door Prometheus.
 
-Naast het ophalen van data wil je er ook iets mee doen. Prometheus staat niet bekend om het visualizeren van de data. Hier kan je een tool zoals Grafana voor gebruiken.
-
-Ook kan je *rules* en *alerts* instellen in Prometheus. Je kan rules instellen die een alert triggeren. Een voorbeeld hiervan is een rule die een alert triggert wanneer een service down is voor 1 minuut. Deze alert komt binnen in de *alertmanager*. De alertmanager kan acties uitvoeren op basis van deze alerts. Een voorbeeld hiervan is dat de alertmanager een melding kan sturen naar Slack. 
+Naast het ophalen van data wil je er ook iets mee doen. Je kan de data visualiseren of een 'rule' opstellen. Prometheus staat niet bekend om het visualizeren van de data. Hier kan je een tool zoals Grafana voor gebruiken. Zoals ik al zei kan je ook rules instellen die een alert triggeren. Een voorbeeld hiervan is een rule die een alert triggert, wanneer een service down is voor 1 minuut. Deze alert komt binnen in de *alertmanager*. De alertmanager kan acties uitvoeren op basis van deze alerts. Een voorbeeld hiervan is dat de alertmanager een melding kan sturen naar Slack. 
 
 ## Prometheus in gebruik
 
 Voor mijn onderzoek heb ik een simpele 'hello world' applicatie gemaakt met Promteheus.
 
-Je begint met een `prometheus.yml` waar je vertelt wat prometheus moet doen. In dit geval definieer je dat Prometheus om de 10 seconde data ophaalt en definieer je de targets waar je de data van ophaalt. Om er voor te zorgen dat anderen dit kunnen 'naspelen' haal ik alleen de data op van prometheus en de node exporter zelf. Als uitbreiding kan je hier als target bijvoorbeeld een eigen API aan koppelen. 
+Je begint met een `prometheus.yml` waar je vertelt wat prometheus moet doen. In dit geval definieer je dat Prometheus om de 10 seconden data ophaalt en definieer je de targets waar je de data van ophaalt. Om ervoor te zorgen dat anderen dit kunnen 'naspelen' haal ik alleen de data op van prometheus en de node exporter zelf. Als uitbreiding kan je hier als target bijvoorbeeld een eigen API aan koppelen. 
 ```
 global:
   scrape_interval: 10s
@@ -72,9 +70,9 @@ networks:
     driver: bridge
 ```
 
-Dit zorgt er voor dat je in de browser (localhost:9090) in Prometheus kan kijken naar de data die wordt opgehaald.
+Dit zorgt ervoor dat je in de browser (localhost:9090) in Prometheus kan kijken naar de data die wordt opgehaald.
 
-Om alerts toe te voegen, is nog een extra configuratie nodig. Hier maak je een `rules.yml` bestand voor aan. Dit bestand zorgt er voor dat er een alert plaats vindt wanneer een service 'down' is.
+Om alerts toe te voegen, is nog een extra configuratie nodig. Hier maak je een `rules.yml` bestand voor aan. Dit bestand zorgt ervoor dat er een alert plaats vindt wanneer een service 'down' is.
 ```
 groups:
  - name: instanceDownRule
@@ -95,7 +93,7 @@ alerting:
         - alert-manager:9093
 ```
 
-Ook in de `docker-compose.yml` moet de alertmanager gedifineerd worden als een service.
+Ook in de `docker-compose.yml` moet de alertmanager gedefineerd worden als een service.
 ```
 alert-manager:
   image: prom/alertmanager
@@ -107,7 +105,7 @@ alert-manager:
 
 Bij het opnieuw uitvoeren van docker-compose up zal de alertmanager draaien op poort 9093. Om de alert te testen kan je handmatig in docker de node-exporter uitzetten. Dit resulteert in een alert die binnenkomt in de alertmanager.
 
-Om iets te doen met deze alerts zoals het sturen van berichten naar Slack heb je nog een extra configuratie nodig. Maak een `alertmanager.yml` aan. Hier definieer je naar welk slack kanaal een bericht moet worden gestuurd. Je hebt wel een `api_url` van Slack nodig, hier heb ik een eigen Slack app voor gemaakt. 
+Om iets te doen met deze alerts, zoals het sturen van berichten naar Slack, heb je nog een extra configuratie nodig. Maak een `alertmanager.yml` aan. Hier definieer je naar welk slack kanaal een bericht moet worden gestuurd. Je hebt wel een `api_url` van Slack nodig, hier heb ik een eigen Slack app voor gemaakt. 
 ```
 global:
   resolve_timeout: 5m
@@ -135,7 +133,7 @@ Pas ook de `docker-compose.yaml` aan zodat er een volume is voor de alertmanager
       - 9093:9093
 ```
 
-Als we nu weer de node-exporter uitzetten resulteert dit in een melding in slack zoals te zien is in afbeelding 3.
+Als we nu weer de node-exporter uitzetten, resulteert dit in een melding in Slack zoals te zien is in afbeelding 3.
 
 <img src="plaatjes/slack-bericht.png" width="1000" align="center" alt="Slack melding" title="Slack melding">
 
@@ -149,7 +147,7 @@ Prometheus is erg gericht op time series data. Het heeft een eigen database (TSD
 
 Er is een alerting systeem waar je meldingen van kan krijgen wanneer er iets fout gaat in je systeem. 
 
-Een groot nadeel aan Prometheus is dat het uitzichzelf niet geschikt is voor long-term monitoring (Ritesh, 2024). Prometheus kan op kleinere projecten goed meeschalen, maar heeft wel moeite voor grotere projecten. Prometheus slaat veel data op, al helemaal als je het opschaalt. Dit kan tot hoge kosten leiden en dat is iets wat je liever niet wilt. Om deze problemen te verhelpen zou je een tool als Thanos kunnen gebruiken. Ik raad je aan om de blog over Thanos te lezen van mijn collega Jelmer (BRON).
+Een groot nadeel aan Prometheus is dat het uit zichzelf niet geschikt is voor long-term monitoring (Ritesh, 2024). Prometheus kan op kleinere projecten goed meeschalen, maar heeft wel moeite voor grotere projecten. Prometheus slaat veel data op, al helemaal als je het opschaalt. Dit kan tot hoge kosten leiden en dat is iets wat je liever niet wilt. Om deze problemen te verhelpen zou je een tool als Thanos kunnen gebruiken. Ik raad je aan om de blog over Thanos te lezen van mijn collega Jelmer (BRON).
 
 Prometheus is open source en dit brengt twee voordelen met zich mee. Prometheus is gratis en wordt ondersteund door een grote community. Zo zijn er meer dan 900 contributors op GitHub.
 
