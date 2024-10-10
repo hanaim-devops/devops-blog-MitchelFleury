@@ -2,7 +2,7 @@
 
 <img src="plaatjes/Prometheus_software_logo.png" width="250" align="right" alt="Prometheus logo" title="Prometheus logo">
 
-*[Mitchel Fleury, oktober 2024.](https://github.com/hanaim-devops/blog-MitchelFleury)*
+*[Mitchel Fleury, oktober 2024.](https://github.com/hanaim-devops/devops-blog-MitchelFleury/tree/main/src/prometheus-binnen-devops-omgeving)*
 <hr/>
 
 Een draaiende applicatie kan tegen problemen aanlopen, maar hoe kom je erachter dat er een probleem is? Een tool als Prometheus verzameld metrics en geeft automatisch meldingen wanneer er iets fout gaat. Wat Prometheus nou precies is en hoe deze tool werkt vertel ik in deze blogpost.
@@ -19,7 +19,7 @@ Prometheus analyseert ook zelf de data en kan alerts versturen naar platforms, z
 
 <img src="plaatjes/prometheus-architecture.png" width="1000" align="center" alt="Prometheus architectuur ontwerp" title="Prometheus architectuur">
 
-*Afbeelding 2: Prometheus architectuur (Guryanov V, 2023).*
+*Afbeelding 1: Prometheus architectuur (Guryanov V, 2023).*
 
 Nu we weten wat Prometheus is en doet is het ook belangrijk om te weten hoe het werkt. In afbeelding 2 is een schets te zien van de architectuur van Prometheus
 
@@ -145,7 +145,7 @@ Als we nu weer de node-exporter uitzetten, resulteert dit in een melding in Slac
 
 <img src="plaatjes/slack-melding.png" width="1000" align="center" alt="Slack melding" title="Slack melding">
 
-*Afbeelding 3: Slack melding.*
+*Afbeelding 2: Slack melding.*
 
 ## Voor- en nadelen
 
