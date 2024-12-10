@@ -19,9 +19,9 @@ Prometheus analyseert ook zelf de data en kan alerts versturen naar platforms, z
 
 <img src="plaatjes/prometheus-architecture.png" width="1000" align="center" alt="Prometheus architectuur ontwerp" title="Prometheus architectuur">
 
-*Afbeelding 1: Prometheus architectuur (Guryanov V, 2023).*
+*Afbeelding 1*: Prometheus architectuur (Guryanov V, 2023)
 
-Nu we weten wat Prometheus is en doet is het ook belangrijk om te weten hoe het werkt. In afbeelding 2 is een schets te zien van de architectuur van Prometheus
+Nu we weten wat Prometheus is en doet is het ook belangrijk om te weten hoe het werkt. Afbeelding 1 toont een schets van de architectuur van Prometheus.
 
 De *Service Discovery* inventariseert en identificeert systemen waarvan metrics kunnen worden verzameld. Deze metrics worden gescraped met HTTP via het Pull model, door bijvoorbeeld aan een API te vragen om metrics. Dit scrapen doen de *exporters.* Deze exporters weten hoe ze de metrics kunnen ophalen, van bijvoorbeeld een API of database en zetten de data om in een formaat dat kan worden gelezen door Prometheus.
 
@@ -141,11 +141,11 @@ Pas ook de `docker-compose.yaml` aan zodat er een volume is voor de alertmanager
       - 9093:9093
 ```
 
-Als we nu weer de node-exporter uitzetten, resulteert dit in een melding in Slack zoals te zien is in afbeelding 3.
+Als we nu weer de node-exporter uitzetten, resulteert dit in een melding in Slack zoals te zien is in afbeelding 2.
 
 <img src="plaatjes/slack-melding.png" width="1000" align="center" alt="Slack melding" title="Slack melding">
 
-*Afbeelding 2: Slack melding.*
+*Afbeelding 2*: Slack melding
 
 ## Voor- en nadelen
 
@@ -169,14 +169,14 @@ Prometheus is geschikt voor kortetermijnanalyses en real-time monitoring, maar m
 
 ## Bronnen
 
-- Daniel F. (2024, 12 juli). *Is Prometheus Monitoring Push or Pull?*. SigNoz. Geraadpleegd op 7 oktober 2024, via https://signoz.io/guides/is-prometheus-monitoring-push-or-pull/
-- Guryanov V. (2023, 17 oktober). *Prometheus and its storage: Architecture, challenges, and solutions*. Palark. Geraadpleegd op 9 oktober 2024, via https://blog.palark.com/prometheus-architecture-tsdb/
-- Noppert J. (2024 oktober). *De ultieme Endgame voor je metrics: Thanos*. GitHub. Geraadpleegd op 9 oktober 2024, via https://github.com/hanaim-devops/devops-blog-pietknoppert/tree/main/src/dev-blog-thanos-snapt-je-devops-together
-- Prometheus. (z.d.-a). *Prometheus overview*. Prometheus. Geraadpleegd op 7 oktober 2024, via https://prometheus.io/docs/introduction/overview/
-- Prometheus. (z.d.-b). *Querying Prometheus*. Prometheus. Geraadpleegd op 7 oktober 2024, via https://prometheus.io/docs/prometheus/latest/querying/basics/
+- Daniel F. (2024, 12 juli). *Is Prometheus Monitoring Push or Pull?*. SigNoz. Geraadpleegd op 7 oktober 2024, via <https://signoz.io/guides/is-prometheus-monitoring-push-or-pull/>
+- Guryanov V. (2023, 17 oktober). *Prometheus and its storage: Architecture, challenges, and solutions*. Palark. Geraadpleegd op 9 oktober 2024, via <https://blog.palark.com/prometheus-architecture-tsdb/>
+- Noppert J. (2024 oktober). *De ultieme Endgame voor je metrics: Thanos*. GitHub. Geraadpleegd op 9 oktober 2024, via <https://github.com/hanaim-devops/devops-blog-pietknoppert/tree/main/src/dev-blog-thanos-snapt-je-devops-together>
+- Prometheus. (z.d.-a). *Prometheus overview*. Prometheus. Geraadpleegd op 7 oktober 2024, via <https://prometheus.io/docs/introduction/overview/>
+- Prometheus. (z.d.-b). *Querying Prometheus*. Prometheus. Geraadpleegd op 7 oktober 2024, via <https://prometheus.io/docs/prometheus/latest/querying/basics/>
 - Prometheus. (z.d.-c). *Glossary*. Prometheus. Geraadpleegd op 7 oktober 2024, via https://prometheus.io/docs/introduction/glossary/
-- Ritesh. (2024, 22 juli). *Scaling Prometheus with Thanos*. Clouddraft. Geraadpleegd op 8 oktober 2024, via https://www.cloudraft.io/blog/scaling-prometheus-with-thanos
-- Tableau. (z.d.). *Time Series Analysis: Definition, Types, Techniques, and When It's Used*. Tableau. Geraadpleegd op 10 oktober 2024, via https://www.tableau.com/analytics/what-is-time-series-analysis
-- Tigera. (z.d.). *Prometheus Monitoring: Use Cases, Metrics, and Best Practices*. Tigera. Geraadpleegd op 7 oktober 2024, via https://www.tigera.io/learn/guides/prometheus-monitoring/
-- Vickers B. (2020, 8 maart). *How Not to Use Prometheus: Storing Events*. Ben Vickers. Geraadpleegd op 9 oktober 2024, via https://bjv.me/2020/03/08/An-Anti-Tutorial-Storing-Events-In-Prometheus
-- Wikipedia Commons. (z.d.). *File:Prometheus software logo.svg*. Wikipedia Commons. Geraadpleegd op 7 oktober 2024, via https://commons.wikimedia.org/wiki/File:Prometheus_software_logo.svg
+- Ritesh. (2024, 22 juli). *Scaling Prometheus with Thanos*. Clouddraft. Geraadpleegd op 8 oktober 2024, via <https://www.cloudraft.io/blog/scaling-prometheus-with-thanos>
+- Tableau. (z.d.). *Time Series Analysis: Definition, Types, Techniques, and When It's Used*. Tableau. Geraadpleegd op 10 oktober 2024, via <https://www.tableau.com/analytics/what-is-time-series-analysis>
+- Tigera. (z.d.). *Prometheus Monitoring: Use Cases, Metrics, and Best Practices*. Tigera. Geraadpleegd op 7 oktober 2024, via <https://www.tigera.io/learn/guides/prometheus-monitoring/>
+- Vickers B. (2020, 8 maart). *How Not to Use Prometheus: Storing Events*. Ben Vickers. Geraadpleegd op 9 oktober 2024, via <https://bjv.me/2020/03/08/An-Anti-Tutorial-Storing-Events-In-Prometheus>
+- Wikipedia Commons. (z.d.). *File:Prometheus software logo.svg*. Wikipedia Commons. Geraadpleegd op 7 oktober 2024, via <https://commons.wikimedia.org/wiki/File:Prometheus_software_logo.svg>
